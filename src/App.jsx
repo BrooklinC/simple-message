@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import TodoItem from './components/TodoItem';
+import TodoForm from './components/TodoForm';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState([
+    { text: "Use ChatGPT to do React", isCompleted: false },
+    { text: "Meet a friend for lunch", isCompleted: false },
+    { text: "Build a barely passable To Do app", isCompleted: false},
+  ]);
+
+  const addTodo = (text) => {
+    const newTodos = [...todos, {text, isCompleted: false }];
+    setTodos(newTodos);
+  };
+
+  const completeTodo = (index) => {
+    const newTodos = [...todos];
+    newTodos[index].isCompleted = !newTodos[index].isCompleted;
+    setTodos(newTodos);
+  };
+
+  const removeTodo = (index) => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      <h1 className="todo-list">My To Do List</h1>
+      {todos.map((todo, index) => (
+        <TodoItem 
+          todo={todo} 
+          key={index} 
+          index={index} 
+          completeTodo={completeTodo} 
+          removeTodo={removeTodo}/>
+      ))}
+      <TodoForm addTodo={addTodo} />
+    </div>
+  );
 }
 
-export default App
+export default App;
